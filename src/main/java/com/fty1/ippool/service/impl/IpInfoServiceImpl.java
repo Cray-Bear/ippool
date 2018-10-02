@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.LinkedList;
 
 /**
  * IpInfo服务实现类
@@ -25,23 +26,30 @@ public class IpInfoServiceImpl implements IpInfoService {
     @Autowired
     private IpInfoRepository ipInfoRepository;
 
+    private LinkedList<IpInfoDO> ips = new LinkedList<>();
+
+
 
     @Override
     public void ipGather() {
-
-        for (int i = 0; i < 10000; i++){
-            IpInfo ipInfo = IpAddressUtils.generateIPfo();
-            if(ipInfo == null){
-                log.info("N");
-                return;
+        IpInfo ipInfo = IpAddressUtils.generateIPfo();
+        if(ipInfo == null){
+            log.info("N");
+            return;
+        }
+        IpInfoDO info = ipInfoRepository.findIpInfoDOByAddressAndPort(ipInfo.getAddress(), ipInfo.getPort());
+        if (info != null) {
+            log.info("E");
+            return;
+        }
+        IpInfoDO ipInfoDO = IpInfoDO.builder().address(ipInfo.getAddress()).createTime(new Date()).port(ipInfo.getPort()).build();
+        ips.add(ipInfoDO);
+        System.out.println(ips.size());
+        synchronized (this) {
+            if(ips.size() > 10){
+                ipInfoRepository.saveAll(ips);
+                ips.clear();
             }
-            IpInfoDO info = ipInfoRepository.findIpInfoDOByAddressAndPort(ipInfo.getAddress(), ipInfo.getPort());
-            if (info != null) {
-                log.info("E");
-                return;
-            }
-            IpInfoDO ipInfoDO = IpInfoDO.builder().address(ipInfo.getAddress()).createTime(new Date()).port(ipInfo.getPort()).build();
-            ipInfoRepository.save(ipInfoDO);
         }
     }
 }
