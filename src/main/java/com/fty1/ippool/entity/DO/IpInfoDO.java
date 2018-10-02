@@ -1,4 +1,4 @@
-package com.fty1.ippool.entity;
+package com.fty1.ippool.entity.DO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * IP信息
@@ -39,4 +40,8 @@ public class IpInfoDO implements Serializable {
      */
     private Integer port;
 
+    /**
+     * 创建时间
+     */
+    private Date createTime;
 }

@@ -2,13 +2,9 @@ package com.fty1.ippool.repository;
 
 import com.alibaba.fastjson.JSON;
 import com.fty1.ippool.IppoolApplicationTests;
-import com.fty1.ippool.entity.IpInfoDO;
-import net.bytebuddy.asm.Advice;
-import org.junit.Assert;
+import com.fty1.ippool.entity.DO.IpInfoDO;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import static org.junit.Assert.*;
 
 public class IpInfoRepositoryTest  extends IppoolApplicationTests {
 
