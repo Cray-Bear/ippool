@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 /**
  * IpInfo服务实现类
  *
@@ -28,9 +30,15 @@ public class IpInfoServiceImpl implements IpInfoService {
     public void ipGather() {
         IpInfo ipInfo = IpAddressUtils.generateIPfo();
         if(ipInfo == null){
+            log.info("N");
             return;
         }
-        IpInfoDO ipInfoDO = IpInfoDO.builder().address(ipInfo.getAddress()).port(ipInfo.getPort()).build();
+        IpInfoDO info = ipInfoRepository.findIpInfoDOByAddressAndPort(ipInfo.getAddress(), ipInfo.getPort());
+        if (info != null) {
+            log.info("E");
+            return;
+        }
+        IpInfoDO ipInfoDO = IpInfoDO.builder().address(ipInfo.getAddress()).createTime(new Date()).port(ipInfo.getPort()).build();
         ipInfoRepository.save(ipInfoDO);
     }
 }
