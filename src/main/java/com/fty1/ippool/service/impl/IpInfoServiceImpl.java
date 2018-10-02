@@ -28,17 +28,20 @@ public class IpInfoServiceImpl implements IpInfoService {
 
     @Override
     public void ipGather() {
-        IpInfo ipInfo = IpAddressUtils.generateIPfo();
-        if(ipInfo == null){
-            log.info("N");
-            return;
+
+        for (int i = 0; i < 10000; i++){
+            IpInfo ipInfo = IpAddressUtils.generateIPfo();
+            if(ipInfo == null){
+                log.info("N");
+                return;
+            }
+            IpInfoDO info = ipInfoRepository.findIpInfoDOByAddressAndPort(ipInfo.getAddress(), ipInfo.getPort());
+            if (info != null) {
+                log.info("E");
+                return;
+            }
+            IpInfoDO ipInfoDO = IpInfoDO.builder().address(ipInfo.getAddress()).createTime(new Date()).port(ipInfo.getPort()).build();
+            ipInfoRepository.save(ipInfoDO);
         }
-        IpInfoDO info = ipInfoRepository.findIpInfoDOByAddressAndPort(ipInfo.getAddress(), ipInfo.getPort());
-        if (info != null) {
-            log.info("E");
-            return;
-        }
-        IpInfoDO ipInfoDO = IpInfoDO.builder().address(ipInfo.getAddress()).createTime(new Date()).port(ipInfo.getPort()).build();
-        ipInfoRepository.save(ipInfoDO);
     }
 }
