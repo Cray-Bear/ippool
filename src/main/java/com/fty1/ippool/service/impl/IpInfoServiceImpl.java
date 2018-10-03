@@ -33,39 +33,34 @@ public class IpInfoServiceImpl implements IpInfoService {
     @Autowired
     private RabbitmqProducer rabbitmqProducer;
 
-
-    private LinkedList<IpInfoDO> ips = new LinkedList<>();
-
-
-
     @Override
     public void ipGather() {
         IpInfo ipInfo = IpAddressUtils.generateIPfo();
-        if(ipInfo == null){
+        if (ipInfo == null) {
             log.info("N");
             return;
         }
-        rabbitmqProducer.producer(RabbitmqQueue.QUEUE_POOL_IP_SOURCE,ipInfo);
+        rabbitmqProducer.producer(RabbitmqQueue.QUEUE_POOL_IP_SOURCE, ipInfo);
     }
 
 
     @Override
-    public void saveIpInfo(@NonNull IpInfo info) {
+    public void ipGather(int n) {
+       while (n > 0) {
+           ipGather();
+           n--;
+       }
+    }
 
+
+    @Override
+    public  void saveIpInfo(@NonNull IpInfo info) {
         IpInfoDO ipInfo = ipInfoRepository.findIpInfoDOByAddressAndPort(info.getAddress(), info.getPort());
-        if (info != null) {
+        if (ipInfo != null) {
             log.info("E");
             return;
         }
-
-        IpInfoDO ipInfoDO = IpInfoDO.builder().address(ipInfo.getAddress()).createTime(new Date()).port(ipInfo.getPort()).build();
-        ips.add(ipInfoDO);
-        System.out.println(ips.size());
-        synchronized (this) {
-            if(ips.size() > 10){
-                ipInfoRepository.saveAll(ips);
-                ips.clear();
-            }
-        }
+        IpInfoDO ipInfoDO = IpInfoDO.builder().address(info.getAddress()).createTime(new Date()).port(info.getPort()).build();
+        ipInfoRepository.save(ipInfoDO);
     }
 }

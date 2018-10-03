@@ -26,5 +26,5 @@
 /.idea/
 /ippool.tree
 ippool.tree
-src/main/resources/static/
-src/main/resources/templates/
+/doc/
+log.log

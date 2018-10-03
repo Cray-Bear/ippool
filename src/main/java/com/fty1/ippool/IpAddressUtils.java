@@ -19,7 +19,7 @@ public class IpAddressUtils {
      * @return
      */
     public static IpInfo generateIPfo() {
-        String address = numberToIp(System.currentTimeMillis());
+        String address = randomIP();
         String port = address.substring(address.lastIndexOf(".")+1);
         IpInfo ipInfo = IpInfo.builder().address(address).port(Integer.valueOf(port)).build();
         return ipInfo;

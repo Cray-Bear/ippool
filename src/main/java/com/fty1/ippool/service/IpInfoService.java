@@ -11,5 +11,7 @@ public interface IpInfoService {
      */
     void ipGather();
 
+    void ipGather(int n);
+
     void saveIpInfo(IpInfo obj);
 }

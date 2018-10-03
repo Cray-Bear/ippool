@@ -1,10 +1,7 @@
 package com.fty1.ippool.component.rabbitmq;
 
-import com.fty1.ippool.service.IpInfoService;
 import lombok.NonNull;
 import org.springframework.amqp.core.AmqpTemplate;
-import org.springframework.amqp.rabbit.core.BatchingRabbitTemplate;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,13 +18,12 @@ public class RabbitmqProducer {
     private AmqpTemplate rabbitTemplate;
 
     /**
-     *
      * @param routingKey
      * @param t
      * @param <T>
      */
-    public <T> void producer(@NonNull String routingKey,@NonNull T t){
-        rabbitTemplate.convertAndSend(routingKey,t);
+    public <T> void producer(@NonNull String routingKey, @NonNull T t) {
+        rabbitTemplate.convertAndSend(routingKey, t);
     }
 
 }
