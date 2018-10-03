@@ -1,6 +1,6 @@
 package com.fty1.ippool.repository;
 
-import com.fty1.ippool.entity.DO.IpInfoDO;
+import com.fty1.ippool.entity.IpInfoDO;
 import org.springframework.data.repository.CrudRepository;
 
 /**

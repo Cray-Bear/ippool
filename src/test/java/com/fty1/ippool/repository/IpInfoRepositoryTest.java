@@ -2,7 +2,7 @@ package com.fty1.ippool.repository;
 
 import com.alibaba.fastjson.JSON;
 import com.fty1.ippool.IppoolApplicationTests;
-import com.fty1.ippool.entity.DO.IpInfoDO;
+import com.fty1.ippool.entity.IpInfoDO;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

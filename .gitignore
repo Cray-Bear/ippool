@@ -24,3 +24,7 @@
 /nbdist/
 /.nb-gradle/
 /.idea/
+/ippool.tree
+ippool.tree
+/doc/
+log.log

@@ -1,10 +1,13 @@
 package com.fty1.ippool.service.impl;
 
 import com.fty1.ippool.IpAddressUtils;
-import com.fty1.ippool.entity.DO.IpInfoDO;
+import com.fty1.ippool.component.rabbitmq.RabbitmqProducer;
+import com.fty1.ippool.component.rabbitmq.RabbitmqQueue;
+import com.fty1.ippool.entity.IpInfoDO;
 import com.fty1.ippool.entity.IpInfo;
 import com.fty1.ippool.repository.IpInfoRepository;
 import com.fty1.ippool.service.IpInfoService;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,30 +29,38 @@ public class IpInfoServiceImpl implements IpInfoService {
     @Autowired
     private IpInfoRepository ipInfoRepository;
 
-    private LinkedList<IpInfoDO> ips = new LinkedList<>();
 
-
+    @Autowired
+    private RabbitmqProducer rabbitmqProducer;
 
     @Override
     public void ipGather() {
         IpInfo ipInfo = IpAddressUtils.generateIPfo();
-        if(ipInfo == null){
+        if (ipInfo == null) {
             log.info("N");
             return;
         }
-        IpInfoDO info = ipInfoRepository.findIpInfoDOByAddressAndPort(ipInfo.getAddress(), ipInfo.getPort());
-        if (info != null) {
+        rabbitmqProducer.producer(RabbitmqQueue.QUEUE_POOL_IP_SOURCE, ipInfo);
+    }
+
+
+    @Override
+    public void ipGather(int n) {
+       while (n > 0) {
+           ipGather();
+           n--;
+       }
+    }
+
+
+    @Override
+    public  void saveIpInfo(@NonNull IpInfo info) {
+        IpInfoDO ipInfo = ipInfoRepository.findIpInfoDOByAddressAndPort(info.getAddress(), info.getPort());
+        if (ipInfo != null) {
             log.info("E");
             return;
         }
-        IpInfoDO ipInfoDO = IpInfoDO.builder().address(ipInfo.getAddress()).createTime(new Date()).port(ipInfo.getPort()).build();
-        ips.add(ipInfoDO);
-        System.out.println(ips.size());
-        synchronized (this) {
-            if(ips.size() > 10){
-                ipInfoRepository.saveAll(ips);
-                ips.clear();
-            }
-        }
+        IpInfoDO ipInfoDO = IpInfoDO.builder().address(info.getAddress()).createTime(new Date()).port(info.getPort()).build();
+        ipInfoRepository.save(ipInfoDO);
     }
 }
