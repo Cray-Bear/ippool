@@ -1,4 +1,4 @@
-package com.fty1.ippool.entity.DO;
+package com.fty1.ippool.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
