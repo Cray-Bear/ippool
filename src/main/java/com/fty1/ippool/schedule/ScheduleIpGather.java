@@ -26,7 +26,7 @@ public class ScheduleIpGather {
     public void ipGather() {
         log.info("收集IP-开始-{}",System.currentTimeMillis());
         //收集IP的代码
-        ipInfoService.ipGather(1);
+        ipInfoService.ipGather(10000);
         log.info("收集IP-结束-{}",System.currentTimeMillis());
     }
 

@@ -29,13 +29,8 @@ info)
 *)
     echo "执行部署"
 
-    #-maven编译
-    mvn clean
-    mvn package -Dmaven.test.skip=true
-
     PROJECT_PWD=`pwd`
     echo "$PWD"
-
     # PID
     PROJECT_PID=`ps -x | grep "$JAVA_HOME/jre/bin/java" | grep "$PROJECT_PWD" | grep 'spring-boot' | awk '{print $1}'`
     if [ -n "$PROJECT_PID" ];
@@ -44,6 +39,10 @@ info)
 	    kill -9 ${PROJECT_PID}
     fi
 
+    #注意先杀死进程然后再编译
+    #-maven编译
+    mvn clean
+    mvn package -Dmaven.test.skip=true
     #-spring-boot:run执行
     mvn spring-boot:run >log.log 2>&1 &
     #----------www.fty1.cn------
