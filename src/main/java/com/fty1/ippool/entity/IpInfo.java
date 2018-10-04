@@ -15,6 +15,9 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class IpInfo implements Serializable {
+
+    private static final long serialVersionUID = 1668710108150674437L;
+
     /**
      * IP地址
      */
@@ -26,4 +29,10 @@ public class IpInfo implements Serializable {
      */
     @NonNull
     private Integer port;
+
+    /**
+     * IP信息唯一值（地址加端口直接hash）
+     */
+    private Integer uniqueCode;
+
 }

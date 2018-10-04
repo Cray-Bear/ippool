@@ -1,6 +1,7 @@
 package com.fty1.ippool.config;
 
 import com.fty1.ippool.component.rabbitmq.ConfigRabbitmq;
+import com.fty1.ippool.component.redis.ConfigRedis;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -12,7 +13,7 @@ import org.springframework.context.annotation.Import;
  **/
 
 @Configuration
-@Import(ConfigRabbitmq.class)
+@Import({ConfigRabbitmq.class, ConfigRedis.class})
 public class AppConfig {
 
 }

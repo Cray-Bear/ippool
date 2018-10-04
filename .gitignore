@@ -28,3 +28,5 @@
 ippool.tree
 /doc/
 log.log
+src/main/resources/static/
+src/main/resources/templates/
