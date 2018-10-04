@@ -28,3 +28,6 @@
 ippool.tree
 /doc/
 log.log
+src/main/resources/static/
+src/main/resources/templates/
+"doc/\347\254\254\344\270\211\351\230\266\346\256\265/\344\274\230\345\214\226\347\257\207-Redis-Jedis\351\202\243\344\272\233\344\272\213\345\204\277.md"
