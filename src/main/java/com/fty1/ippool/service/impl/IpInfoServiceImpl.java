@@ -5,6 +5,8 @@ import com.fty1.ippool.component.rabbitmq.RabbitmqProducer;
 import com.fty1.ippool.component.rabbitmq.RabbitmqQueue;
 import com.fty1.ippool.component.redis.RedisBitMapConfig;
 import com.fty1.ippool.component.redis.RedisManager;
+import com.fty1.ippool.component.threadpool.ThreadPoolRabbitmqConsumer;
+import com.fty1.ippool.component.threadpool.ThreadPoolRabbitmqProducer;
 import com.fty1.ippool.entity.IpInfo;
 import com.fty1.ippool.entity.IpInfoDO;
 import com.fty1.ippool.repository.IpInfoRepository;
@@ -13,6 +15,7 @@ import com.fty1.ippool.utils.Fty1JsonUtils;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -84,6 +87,7 @@ public class IpInfoServiceImpl implements IpInfoService {
 
 
     @Override
+    @Async(ThreadPoolRabbitmqProducer.THREAD_POOL_RABBITMQ_PRODUCER)
     public void ipGather(int n) {
         if (n <= 0) {
             return;
@@ -104,5 +108,24 @@ public class IpInfoServiceImpl implements IpInfoService {
          * 写入Redis
          */
         redisManager.mark(RedisBitMapConfig.BITMAP_UNIQUE_IP_POOL_HASH_CODE,info.getUniqueCode());
+    }
+
+
+    @Override
+    @Async(ThreadPoolRabbitmqConsumer.THREAD_POOL_RABBITMQ_CONSUMER)
+    public void consumerIpInfo(IpInfo info) {
+        log.info("消费者-consumerQueuePoolIpSource-参数:{}", Fty1JsonUtils.toJsonString(info));
+        if (info == null) {
+            log.info("消费者-consumerQueuePoolIpSource-结果:参数为空");
+            return;
+        }
+
+        boolean exists =  redisManager.query(RedisBitMapConfig.BITMAP_UNIQUE_IP_POOL_HASH_CODE,info.getUniqueCode());
+        if(exists){
+            log.info("E");
+            return;
+        }
+
+        saveIpInfo(info);
     }
 }

@@ -3,6 +3,8 @@ package com.fty1.ippool.service;
 import com.fty1.ippool.entity.IpInfo;
 import org.springframework.stereotype.Component;
 
+import java.util.LinkedList;
+
 @Component
 public interface IpInfoService {
 
@@ -14,4 +16,6 @@ public interface IpInfoService {
     void ipGather(int n);
 
     void saveIpInfo(IpInfo obj);
+
+    void consumerIpInfo(IpInfo info);
 }

@@ -1,8 +1,10 @@
 package com.fty1.ippool.schedule;
 
+import com.fty1.ippool.component.threadpool.ThreadPoolRabbitmqProducer;
 import com.fty1.ippool.service.IpInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +28,7 @@ public class ScheduleIpGather {
     public void ipGather() {
         log.info("收集IP-开始-{}",System.currentTimeMillis());
         //收集IP的代码
-        ipInfoService.ipGather(100);
+        ipInfoService.ipGather(10000);
         log.info("收集IP-结束-{}",System.currentTimeMillis());
     }
 
