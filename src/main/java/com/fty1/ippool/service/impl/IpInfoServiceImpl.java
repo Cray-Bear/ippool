@@ -6,6 +6,7 @@ import com.fty1.ippool.component.rabbitmq.RabbitmqQueue;
 import com.fty1.ippool.component.redis.RedisBitMapConfig;
 import com.fty1.ippool.component.redis.RedisManager;
 import com.fty1.ippool.component.threadpool.ThreadPoolRabbitmqConsumer;
+import com.fty1.ippool.component.threadpool.ThreadPoolRabbitmqProducer;
 import com.fty1.ippool.entity.IpInfo;
 import com.fty1.ippool.entity.IpInfoDO;
 import com.fty1.ippool.repository.IpInfoRepository;
@@ -86,6 +87,7 @@ public class IpInfoServiceImpl implements IpInfoService {
 
 
     @Override
+    @Async(ThreadPoolRabbitmqProducer.THREAD_POOL_RABBITMQ_PRODUCER)
     public void ipGather(int n) {
         if (n <= 0) {
             return;
@@ -107,6 +109,7 @@ public class IpInfoServiceImpl implements IpInfoService {
          */
         redisManager.mark(RedisBitMapConfig.BITMAP_UNIQUE_IP_POOL_HASH_CODE,info.getUniqueCode());
     }
+
 
     @Override
     @Async(ThreadPoolRabbitmqConsumer.THREAD_POOL_RABBITMQ_CONSUMER)

@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import java.util.LinkedList;
+
 /**
  * Rabbitmq消息消费者
  *
@@ -26,9 +28,6 @@ public class RabbitmqConsumer {
 
 
     @Autowired
-    private RedisManager redisManager;
-
-    @Autowired
     private IpInfoService ipInfoService;
 
     @RabbitHandler
@@ -37,9 +36,8 @@ public class RabbitmqConsumer {
             log.info("消费者-consumerQueuePoolIpSource-结果:参数为空");
             return;
         }
+
         ipInfoService.consumerIpInfo(info);
-
-
     }
 
 }
