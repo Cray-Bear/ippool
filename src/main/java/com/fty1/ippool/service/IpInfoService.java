@@ -14,4 +14,6 @@ public interface IpInfoService {
     void ipGather(int n);
 
     void saveIpInfo(IpInfo obj);
+
+    void consumerIpInfo(IpInfo info);
 }
