@@ -18,4 +18,12 @@ import lombok.NoArgsConstructor;
 public class RtResult<T> {
     private Boolean success;
     private T data;
+
+    public static <T> RtResult<T> success(T data) {
+        return new RtResult<>(true, data);
+    }
+
+    public static <T> RtResult<T> failure(T data) {
+        return new RtResult<>(true, data);
+    }
 }

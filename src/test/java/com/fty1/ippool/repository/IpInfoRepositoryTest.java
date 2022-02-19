@@ -21,6 +21,5 @@ public class IpInfoRepositoryTest  extends IppoolApplicationTests {
         System.out.println(JSON.toJSONString(re));
         IpInfoDO res = ipInfoRepository.findIpInfoDOByAddressAndPort(ipInfoDO.getAddress(), ipInfoDO.getPort());
         System.out.println(JSON.toJSONString(res));
-
     }
 }
